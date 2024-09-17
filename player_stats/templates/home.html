@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NBA Stats Home</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to NBA Stats!</h1>
+        <p>Click below to search for NBA player stats</p>
+        <a href="{% url 'search_player' %}">Search Player Stats</a>
+    </div>
+</body>
+</html>

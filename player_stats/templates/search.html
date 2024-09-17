@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Player</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Search NBA Player</h1>
+        <form method="POST" action="{% url 'player_stats' %}">
+            {% csrf_token %}
+            <input type="text" name="player_name" placeholder="Enter Player Name">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+</body>
+</html>

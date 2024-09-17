@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Stats</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Player Stats</h1>
+
+        {% if player %}
+            <h2>{{ player.first_name }} {{ player.last_name }}</h2>
+            <p>Position: {{ player.position }}</p>
+            <p>Team: {{ player.team.full_name }}</p>
+
+            <h3>Stats</h3>
+            {% if stats %}
+                <ul class="list-group">
+                    {% for stat in stats %}
+                        <li class="list-group-item">Points: {{ stat.pts }}, Assists: {{ stat.ast }}, Rebounds: {{ stat.reb }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No stats available.</p>
+            {% endif %}
+        {% elif error %}
+            <p>{{ error }}</p>
+        {% else %}
+            <p>No player found.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

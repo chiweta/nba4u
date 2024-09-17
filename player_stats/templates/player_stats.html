@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Stats</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Player Stats</h1>
+
+        {% if error %}
+            <p>{{ error }}</p>
+        {% else %}
+            <p><strong>Name:</strong> {{ player.first_name }} {{ player.last_name }}</p>
+            <p><strong>Team:</strong> {{ player.team.full_name }}</p>
+            <p><strong>Position:</strong> {{ player.position }}</p>
+            <p><strong>Height:</strong> {{ player.height_feet }}' {{ player.height_inches }}"</p>
+            <p><strong>Weight:</strong> {{ player.weight_pounds }} lbs</p>
+
+            <h2>Stats</h2>
+            <p><strong>Points per Game:</strong> {{ stats.pts }}</p>
+            <p><strong>Rebounds per Game:</strong> {{ stats.reb }}</p>
+            <p><strong>Assists per Game:</strong> {{ stats.ast }}</p>
+            <p><strong>Steals per Game:</strong> {{ stats.stl }}</p>
+            <p><strong>Blocks per Game:</strong> {{ stats.blk }}</p>
+            <p><strong>Field Goal Percentage:</strong> {{ stats.fg_pct }}</p>
+            <p><strong>3-Point Percentage:</strong> {{ stats.fg3_pct }}</p>
+            <p><strong>Free Throw Percentage:</strong> {{ stats.ft_pct }}</p>
+        {% endif %}
+    </div>
+</body>
+</html>
