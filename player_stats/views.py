@@ -21,14 +21,14 @@ def player_stats(request):
         name_parts = player_name.split()
 
         headers = {
-            "Authorization": API_KEY  # Your API Key
+            "Authorization": "b902502d-d944-434e-89c3-951cbb462fe9"  # Your API Key
         }
 
         try:
-            # First, try to get the player details using the full name or partial name
+            # Search for the player by the last name
             player_url = f"https://api.balldontlie.io/v1/players?search={name_parts[-1]}"  # Search by last name
-
             player_response = requests.get(player_url, headers=headers)
+            
             if player_response.status_code != 200:
                 error_message = f"Error fetching player data. Status code: {player_response.status_code}"
                 return render(request, 'player_stats.html', {'error': error_message})
@@ -51,6 +51,15 @@ def player_stats(request):
                 error_message = "Exact player not found. Please try again."
                 return render(request, 'player_stats.html', {'error': error_message})
 
+            # Get player height and weight
+            height_feet = exact_player.get('height_feet')
+            height_inches = exact_player.get('height_inches')
+            weight_pounds = exact_player.get('weight_pounds')
+
+            # Handle missing height or weight values
+            height_display = f"{height_feet or 'N/A'}' {height_inches or 'N/A'}\""
+            weight_display = f"{weight_pounds or 'N/A'} lbs"
+
             # If player is found, proceed to fetch stats
             player_id = exact_player['id']
             stats_url = f"https://api.balldontlie.io/v1/season_averages?season=2023&player_ids[]={player_id}"
@@ -71,7 +80,9 @@ def player_stats(request):
             # Render player info and stats to the template
             return render(request, 'player_stats.html', {
                 'player': exact_player,
-                'stats': stats
+                'stats': stats,
+                'height_display': height_display,
+                'weight_display': weight_display
             })
 
         except RequestException as e:

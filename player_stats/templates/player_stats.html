@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Player Stats</title>
-    {% load static %}
+    {% load static %}  <!-- This line loads the static files template tag -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
@@ -17,19 +17,30 @@
             <p><strong>Name:</strong> {{ player.first_name }} {{ player.last_name }}</p>
             <p><strong>Team:</strong> {{ player.team.full_name }}</p>
             <p><strong>Position:</strong> {{ player.position }}</p>
-            <p><strong>Height:</strong> {{ player.height_feet }}' {{ player.height_inches }}"</p>
-            <p><strong>Weight:</strong> {{ player.weight_pounds }} lbs</p>
 
-            <h2>Stats</h2>
-            <p><strong>Points per Game:</strong> {{ stats.pts }}</p>
-            <p><strong>Rebounds per Game:</strong> {{ stats.reb }}</p>
-            <p><strong>Assists per Game:</strong> {{ stats.ast }}</p>
-            <p><strong>Steals per Game:</strong> {{ stats.stl }}</p>
-            <p><strong>Blocks per Game:</strong> {{ stats.blk }}</p>
+            <!-- Display Height and Weight -->
+            <p><strong>Height:</strong> {% if player.height_feet and player.height_inches %} 
+                {{ player.height_feet }}' {{ player.height_inches }}" 
+            {% else %} N/A 
+            {% endif %}</p>
+
+            <p><strong>Weight:</strong> {% if player.weight %} 
+                {{ player.weight }} lbs 
+            {% else %} N/A 
+            {% endif %}</p>
+
+            <h2>Season Averages (2023)</h2>
+            <p><strong>Points per game:</strong> {{ stats.pts }}</p>
+            <p><strong>Rebounds per game:</strong> {{ stats.reb }}</p>
+            <p><strong>Assists per game:</strong> {{ stats.ast }}</p>
+            <p><strong>Steals per game:</strong> {{ stats.stl }}</p>
+            <p><strong>Blocks per game:</strong> {{ stats.blk }}</p>
             <p><strong>Field Goal Percentage:</strong> {{ stats.fg_pct }}</p>
             <p><strong>3-Point Percentage:</strong> {{ stats.fg3_pct }}</p>
             <p><strong>Free Throw Percentage:</strong> {{ stats.ft_pct }}</p>
         {% endif %}
+
+        <a href="{% url 'search_player' %}">Search for another player</a>
     </div>
 </body>
 </html>
