@@ -19,10 +19,14 @@
             <p><strong>Position:</strong> {{ player.position }}</p>
 
             <!-- Display Height and Weight -->
-            <p><strong>Height:</strong> {% if player.height_feet and player.height_inches %} 
-                {{ player.height_feet }}' {{ player.height_inches }}" 
-            {% else %} N/A 
-            {% endif %}</p>
+            <p><strong>Height:</strong> 
+                {% if player.height %}
+                    {{ player.height }}
+                {% else %}
+                    Height not available
+                {% endif %}
+            </p>
+                
 
             <p><strong>Weight:</strong> {% if player.weight %} 
                 {{ player.weight }} lbs 

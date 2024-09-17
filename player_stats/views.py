@@ -16,8 +16,6 @@ def search_player(request):
 def player_stats(request):
     if request.method == 'POST':
         player_name = request.POST.get('player_name').strip()
-
-        # Split the name into first and last names
         name_parts = player_name.split()
 
         headers = {
@@ -25,17 +23,16 @@ def player_stats(request):
         }
 
         try:
-            # Search for the player by the last name
-            player_url = f"https://api.balldontlie.io/v1/players?search={name_parts[-1]}"  # Search by last name
+            # Search by last name
+            player_url = f"https://api.balldontlie.io/v1/players?search={name_parts[-1]}"
             player_response = requests.get(player_url, headers=headers)
-            
+
             if player_response.status_code != 200:
                 error_message = f"Error fetching player data. Status code: {player_response.status_code}"
                 return render(request, 'player_stats.html', {'error': error_message})
 
             player_data = player_response.json()
 
-            # Check if any players are found
             if not player_data['data']:
                 error_message = "Player not found. Please try again with a different name."
                 return render(request, 'player_stats.html', {'error': error_message})
@@ -51,20 +48,11 @@ def player_stats(request):
                 error_message = "Exact player not found. Please try again."
                 return render(request, 'player_stats.html', {'error': error_message})
 
-            # Get player height and weight
-            height_feet = exact_player.get('height_feet')
-            height_inches = exact_player.get('height_inches')
-            weight_pounds = exact_player.get('weight_pounds')
-
-            # Handle missing height or weight values
-            height_display = f"{height_feet or 'N/A'}' {height_inches or 'N/A'}\""
-            weight_display = f"{weight_pounds or 'N/A'} lbs"
-
-            # If player is found, proceed to fetch stats
+            # Fetch the player stats
             player_id = exact_player['id']
             stats_url = f"https://api.balldontlie.io/v1/season_averages?season=2023&player_ids[]={player_id}"
-
             stats_response = requests.get(stats_url, headers=headers)
+
             if stats_response.status_code != 200:
                 error_message = f"Error fetching player stats. Status code: {stats_response.status_code}"
                 return render(request, 'player_stats.html', {'error': error_message})
@@ -75,14 +63,12 @@ def player_stats(request):
                 error_message = "No stats available for this player."
                 return render(request, 'player_stats.html', {'error': error_message})
 
-            stats = stats_data['data'][0]  # Assuming there's data for the latest season
+            stats = stats_data['data'][0]  # Latest season stats
 
             # Render player info and stats to the template
             return render(request, 'player_stats.html', {
                 'player': exact_player,
-                'stats': stats,
-                'height_display': height_display,
-                'weight_display': weight_display
+                'stats': stats
             })
 
         except RequestException as e:
