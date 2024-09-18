@@ -9,7 +9,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Player Stats</h1>
+        <h1>NBA4U</h1>
 
         {% if error %}
             <p>{{ error }}</p>
@@ -26,7 +26,6 @@
                     Height not available
                 {% endif %}
             </p>
-                
 
             <p><strong>Weight:</strong> {% if player.weight %} 
                 {{ player.weight }} lbs 
@@ -42,6 +41,11 @@
             <p><strong>Field Goal Percentage:</strong> {{ stats.fg_pct }}</p>
             <p><strong>3-Point Percentage:</strong> {{ stats.fg3_pct }}</p>
             <p><strong>Free Throw Percentage:</strong> {{ stats.ft_pct }}</p>
+
+            <!-- Display calculated grade and score -->
+            <h2>Player Grade</h2>
+            <p><strong>Grade:</strong> {{ grade }}</p>
+            <p><strong>Score:</strong> {{ score }} / 100</p>
         {% endif %}
 
         <a href="{% url 'search_player' %}">Search for another player</a>

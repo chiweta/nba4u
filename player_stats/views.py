@@ -12,6 +12,38 @@ def home(request):
 def search_player(request):
     return render(request, 'search.html')
 
+def calculate_score_and_grade(stats):
+    # Basic scoring logic: Higher points, rebounds, assists, etc., increase the score.
+    score = 0
+    score += stats.get('pts', 0) * 2       # Points are weighted heavily
+    score += stats.get('reb', 0) * 1.5     # Rebounds are also important
+    score += stats.get('ast', 0) * 1.5     # Assists are important
+    score += stats.get('stl', 0) * 2       # Steals and blocks are defensive stats
+    score += stats.get('blk', 0) * 2
+    score += stats.get('fg_pct', 0) * 50   # Field Goal percentage is given weight
+    score += stats.get('ft_pct', 0) * 30   # Free throw percentage
+    score += stats.get('fg3_pct', 0) * 40  # 3-point percentage
+
+    # Ensure the score is out of 100
+    max_score = 100
+    score = min(score, max_score)
+
+    # Define the grade based on the score
+    if score >= 90:
+        grade = 'A+'
+    elif score >= 80:
+        grade = 'A'
+    elif score >= 70:
+        grade = 'B'
+    elif score >= 60:
+        grade = 'C'
+    elif score >= 50:
+        grade = 'D'
+    else:
+        grade = 'F'
+
+    return score, grade
+
 # Player Stats view to display the stats of the player based on input
 def player_stats(request):
     if request.method == 'POST':
@@ -65,10 +97,15 @@ def player_stats(request):
 
             stats = stats_data['data'][0]  # Latest season stats
 
-            # Render player info and stats to the template
+            # Calculate score and grade based on stats
+            score, grade = calculate_score_and_grade(stats)
+
+            # Render player info, stats, score, and grade to the template
             return render(request, 'player_stats.html', {
                 'player': exact_player,
-                'stats': stats
+                'stats': stats,
+                'score': score,
+                'grade': grade
             })
 
         except RequestException as e:
